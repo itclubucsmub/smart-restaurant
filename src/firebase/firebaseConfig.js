@@ -1,8 +1,8 @@
 export default {
-    apiKey: "API_KEY",
-    authDomain: "AUTH_DOMAIN",
-    databaseURL: "DATABASE_URL",
-    projectId: "PROJECT_ID",
-    storageBucket: "STORAGE_BUCKET",
-    messagingSenderId: "MESSAGING_SENDER_ID"
-  }
+  apiKey: "AIzaSyB9iKUB_xfsjPyqScjDrhEDBzUS63mreww",
+  authDomain: "smart-resaurtant.firebaseapp.com",
+  databaseURL: "https://smart-resaurtant.firebaseio.com",
+  projectId: "smart-resaurtant",
+  storageBucket: "smart-resaurtant.appspot.com",
+  messagingSenderId: "763025426293"
+}
