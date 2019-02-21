@@ -5,12 +5,13 @@ import Inventory from '../components/Inventory.vue'
 import Category from '../components/Category.vue'
 import Feedback from '../components/Feedback.vue'
 import OrderDetail from '../components/OrderDetail.vue'
+import OrderHistory from '../components/OrderHistory.vue'
 
 Vue.use(VueRouter)
 
 const routes = [{
         path: '/',
-        name:'Order',
+        name: 'Order',
         component: Order
     },
     {
@@ -24,10 +25,16 @@ const routes = [{
     {
         path: '/feedback',
         component: Feedback
-    }, {
+    },
+    {
         path: '/orderdetail/:id',
         name: 'OrderDetail',
         component: OrderDetail
+    },
+    {
+        path: '/orderhistory',
+        name: 'OrderHistory',
+        component: OrderHistory
     }
 ]
 

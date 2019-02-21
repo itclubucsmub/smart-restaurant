@@ -4,6 +4,8 @@
       <v-flex md12>
         <v-toolbar>
           <v-toolbar-title>Order List</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" flat mb-3 @click="goOrderHistory">Order History</v-btn>
         </v-toolbar>
         <v-card v-for="order in orderList" :key="order['.key']" class="hoverpointer">
           <v-flex md12 pa-4 mmunicode @click="detail(order)">
@@ -44,6 +46,9 @@ export default {
   methods: {
     detail(item) {
       router.push({ name: "OrderDetail", params: { id: item[".key"] } });
+    },
+    goOrderHistory() {
+      router.push({ name: "OrderHistory" });
     }
   }
 };

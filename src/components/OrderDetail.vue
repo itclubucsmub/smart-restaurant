@@ -103,6 +103,7 @@ export default {
         } else {
           alert("No such document!");
         }
+        this.stockList = [];
         this.getStock();
       });
   },
@@ -111,10 +112,12 @@ export default {
       router.push({ name: "Order" });
     },
     getStock() {
+      console.clear();
       this.pri = 0;
       var query = firestore.collection("stocklist");
       for (let index = 0; index < this.orders.length; index++) {
         const element = this.orders[index];
+        console.log(element.itemID);
         this.calcAmt(element.chargePrice);
 
         this.orderList.push(element);
@@ -138,7 +141,7 @@ export default {
       firestore
         .collection("order")
         .doc(this.key)
-        .update({ status: "comfirmed" })
+        .update({ status: "confirmed" })
         .then(this.backtoOrder());
     },
     cancelOrder() {
