@@ -1,11 +1,10 @@
 import firestore from '../../firebase/firestore'
 
-export default (data) => {
+export default (data, col) => {
       // Add a new document in collection
-      firestore.collection('stocklist')
+      firestore.collection(col)
         .doc()
         .set(data)
         .then(
-            console.log('Added => ' , data)
       )
 }

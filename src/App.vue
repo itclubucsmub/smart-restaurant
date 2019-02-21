@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" fixed app>
-      
       <v-list class="pt-1" dense>
-
         <v-list-tile v-for="item in items" :key="item.title" :to="item.to">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -18,7 +16,7 @@
     <v-toolbar fixed color="primary">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     </v-toolbar>
-    <v-toolbar fixed app :clipped-left="clipped">
+    <v-toolbar fixed app :clipped-left="clipped" dark color="primary">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
@@ -40,8 +38,9 @@ export default {
       fixed: false,
       items: [
         { icon: "bubble_chart", title: "Order", to: "/" },
+        { icon: "feedback", title: "Feedback", to: "/feedback" },
         { icon: "apps", title: "Inventory", to: "/inventory" },
-        { icon: "apps", title: "Category", to: "/category" }
+        { icon: "library_books", title: "Category", to: "/category" }
       ],
       miniVariant: false,
       right: false,

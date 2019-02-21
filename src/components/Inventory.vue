@@ -14,21 +14,20 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                {{editedItem}}
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.item_id" label="Id"></v-text-field>
+                  <v-text-field v-model="editedItem.item_id" label="Id" type="number"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editedItem.item_name" label="Name"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.item_price" label="Price"></v-text-field>
+                  <v-text-field v-model="editedItem.item_price" label="Price" type="number"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editedItem.item_image" label="Image"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.cateID" label="Category ID"></v-text-field>
+                  <v-text-field v-model="editedItem.cateID" label="Category ID" type="number"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -74,6 +73,7 @@ import crudsUpdate from "./controllers/crudsUpdate.js";
 import crudsDelete from "./controllers/crudsDelete.js";
 
 const collectionRef = firestore.collection("stocklist");
+const cateRef = firestore.collection("cateList");
 
 export default {
   data() {
@@ -89,29 +89,31 @@ export default {
       ],
       editedIndex: -1,
       editedItem: {
-        item_id: "",
+        item_id: 0,
         item_name: "",
-        item_price: "",
+        item_price: 0,
         item_image: "",
-        cateID: ""
+        cateID: 0
       },
       defaultItem: {
-        item_id: "",
+        item_id: 0,
         item_name: "",
-        item_price: "",
+        item_price: 0,
         item_image: "",
-        cateID: ""
+        cateID: 0
       },
       dataMsg: "No data found",
       rowsPerPageItems: [10, 30, 50],
       pagination: {
         rowsPerPage: 10
-      }
+      },
+      cateTitleList: []
     };
   },
   firestore() {
     return {
-      stockList: collectionRef
+      stockList: collectionRef,
+      cateList: cateRef
     };
   },
   computed: {
@@ -127,16 +129,7 @@ export default {
   },
 
   created() {},
-  mounted() {
-    // collectionRef.get().then(snapshot => {
-    //   snapshot.forEach(doc => {
-    //     var tempData = {};
-    //     tempData = doc.data();
-    //     tempData.key = doc.id;
-    //     this.stockList.push(tempData);
-    //   });
-    // });
-  },
+  mounted() {},
 
   methods: {
     editItem(item) {
@@ -146,7 +139,7 @@ export default {
     },
     deleteItem(item) {
       confirm("Are you sure you want to delete this item?") &&
-        crudsDelete(item);
+        crudsDelete(item, "stocklist");
     },
     close() {
       this.dialog = false;
@@ -158,25 +151,27 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         var editTmp = {};
-        var ekey = this.editedItem['.key'];
-        editTmp.item_id = this.editedItem.item_id;
+        var ekey = this.editedItem[".key"];
+        editTmp.item_id = parseInt(this.editedItem.item_id);
         editTmp.item_name = this.editedItem.item_name;
-        editTmp.item_price = this.editedItem.item_price;
+        editTmp.item_price = parseInt(this.editedItem.item_price);
         editTmp.item_image = this.editedItem.item_image;
-        editTmp.cateID = this.editedItem.cateID;
-        crudsUpdate(ekey, editTmp);
-        console.log(ekey, editTmp);
+        editTmp.cateID = parseInt(this.editedItem.cateID);
+        crudsUpdate(ekey, editTmp, "stocklist");
         //edit
       } else {
         //save
         // parms (id, data)
-        crudsAdd({
-          item_id: this.editedItem.item_id,
-          item_name: this.editedItem.item_name,
-          item_price: this.editedItem.item_price,
-          item_image: this.editedItem.item_image,
-          cateID: this.editedItem.cateID
-        });
+        crudsAdd(
+          {
+            item_id: parseInt(this.editedItem.item_id),
+            item_name: this.editedItem.item_name,
+            item_price: parseInt(this.editedItem.item_price),
+            item_image: this.editedItem.item_image,
+            cateID: parseInt(this.editedItem.cateID)
+          },
+          "stocklist"
+        );
       }
       this.close();
     }

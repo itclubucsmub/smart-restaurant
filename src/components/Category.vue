@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-toolbar flat color="white">
-      <v-toolbar-title>Stock List</v-toolbar-title>
+      <v-toolbar-title>Category List</v-toolbar-title>
       <v-divider class="mx-2" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">New Stock</v-btn>
+        <v-btn slot="activator" color="primary" dark class="mb-2">New Category</v-btn>
         <v-card>
           <v-card-title>
             <span class="headline">{{ formTitle }}</span>
@@ -14,21 +14,14 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                {{editedItem}}
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.item_id" label="Id"></v-text-field>
+                  <v-text-field v-model="editedItem.id" label="Id"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.item_name" label="Name"></v-text-field>
+                  <v-text-field v-model="editedItem.title" label="Name"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.item_price" label="Price"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.item_image" label="Image"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.cateID" label="Category ID"></v-text-field>
+                  <v-text-field v-model="editedItem.icon" label="Icon"></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -44,17 +37,15 @@
     </v-toolbar>
     <v-data-table
       :headers="headers"
-      :items="stockList"
+      :items="cateList"
       :pagination.sync="pagination"
       :rows-per-page-items="rowsPerPageItems"
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.item_id }}</td>
-        <td>{{ props.item.item_name }}</td>
-        <td>{{ props.item.item_price }}</td>
-        <td>{{ props.item.item_image }}</td>
-        <td>{{ props.item.cateID }}</td>
+        <td>{{ props.item.id }}</td>
+        <td>{{ props.item.title }}</td>
+        <td>{{ props.item.icon }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
           <v-icon small @click="deleteItem(props.item)">delete</v-icon>
@@ -73,34 +64,28 @@ import crudsAdd from "./controllers/crudsAdd.js";
 import crudsUpdate from "./controllers/crudsUpdate.js";
 import crudsDelete from "./controllers/crudsDelete.js";
 
-const collectionRef = firestore.collection("stocklist");
+const collectionRef = firestore.collection("catelist");
 
 export default {
   data() {
     return {
       dialog: false,
       headers: [
-        { text: "ID", value: "item_id", sortable: true },
-        { text: "Name", value: "item_name", sortable: true },
-        { text: "Price", value: "item_price", sortable: false },
-        { text: "Image", value: "item_image", sortable: false },
-        { text: "Category", value: "cateID", sortable: false },
+        { text: "ID", value: "id", sortable: true },
+        { text: "Title", value: "title", sortable: true },
+        { text: "Icon", value: "icon", sortable: false },
         { text: "Actions", value: "name", align: "center", sortable: false }
       ],
       editedIndex: -1,
       editedItem: {
-        item_id: "",
-        item_name: "",
-        item_price: "",
-        item_image: "",
-        cateID: ""
+        id: "",
+        title: "",
+        icon: ""
       },
       defaultItem: {
-        item_id: "",
-        item_name: "",
-        item_price: "",
-        item_image: "",
-        cateID: ""
+        id: "",
+        title: "",
+        icon: ""
       },
       dataMsg: "No data found",
       rowsPerPageItems: [10, 30, 50],
@@ -111,7 +96,7 @@ export default {
   },
   firestore() {
     return {
-      stockList: collectionRef
+      cateList: collectionRef
     };
   },
   computed: {
@@ -127,26 +112,17 @@ export default {
   },
 
   created() {},
-  mounted() {
-    // collectionRef.get().then(snapshot => {
-    //   snapshot.forEach(doc => {
-    //     var tempData = {};
-    //     tempData = doc.data();
-    //     tempData.key = doc.id;
-    //     this.stockList.push(tempData);
-    //   });
-    // });
-  },
+  mounted() {},
 
   methods: {
     editItem(item) {
-      this.editedIndex = this.stockList.indexOf(item);
+      this.editedIndex = this.cateList.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
     deleteItem(item) {
       confirm("Are you sure you want to delete this item?") &&
-        crudsDelete(item);
+        crudsDelete(item, "catelist");
     },
     close() {
       this.dialog = false;
@@ -158,25 +134,23 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         var editTmp = {};
-        var ekey = this.editedItem['.key'];
-        editTmp.item_id = this.editedItem.item_id;
-        editTmp.item_name = this.editedItem.item_name;
-        editTmp.item_price = this.editedItem.item_price;
-        editTmp.item_image = this.editedItem.item_image;
-        editTmp.cateID = this.editedItem.cateID;
-        crudsUpdate(ekey, editTmp);
-        console.log(ekey, editTmp);
+        var ekey = this.editedItem[".key"];
+        editTmp.id = this.editedItem.id;
+        editTmp.title = this.editedItem.title;
+        editTmp.icon = this.editedItem.icon;
+        crudsUpdate(ekey, editTmp, "catelist");
         //edit
       } else {
         //save
         // parms (id, data)
-        crudsAdd({
-          item_id: this.editedItem.item_id,
-          item_name: this.editedItem.item_name,
-          item_price: this.editedItem.item_price,
-          item_image: this.editedItem.item_image,
-          cateID: this.editedItem.cateID
-        });
+        crudsAdd(
+          {
+            id: this.editedItem.id,
+            title: this.editedItem.title,
+            icon: this.editedItem.icon
+          },
+          "catelist"
+        );
       }
       this.close();
     }
