@@ -59,10 +59,10 @@
                   <v-flex md4>Total:</v-flex>
                   <v-flex md6 text-md-left>{{pri}} MMKs</v-flex>
                   <v-flex md3 mt-4>
-                    <v-btn outline round color="error">Cancel</v-btn>
+                    <v-btn outline round color="error" @click="cancelOrder">Cancel</v-btn>
                   </v-flex>
                   <v-flex md3 mt-4>
-                    <v-btn outline round color="primary">Comfirm</v-btn>
+                    <v-btn outline round color="primary" @click="comfirmOrder">Comfirm</v-btn>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -133,6 +133,20 @@ export default {
     },
     calcAmt(price) {
       this.pri += price;
+    },
+    comfirmOrder() {
+      firestore
+        .collection("order")
+        .doc(this.key)
+        .update({ status: "comfirmed" })
+        .then(this.backtoOrder());
+    },
+    cancelOrder() {
+      firestore
+        .collection("order")
+        .doc(this.key)
+        .update({ status: "canceled" })
+        .then(this.backtoOrder());
     }
   }
 };

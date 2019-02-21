@@ -7,10 +7,19 @@
         </v-toolbar>
         <v-card v-for="order in orderList" :key="order['.key']" class="hoverpointer">
           <v-flex md12 pa-4 mmunicode @click="detail(order)">
-            <span class="spanblock">{{order.user.name}}</span>
-            <span class="spanblock">{{order.user.phone}}</span>
-            <span class="spanblock">{{order.user.address}}</span>
+            <v-layout row wrap>
+              <v-flex md2>
+                <span class="spanblock">{{order.user.name}}</span>
+              </v-flex>
+              <v-flex md2 text-md-left>
+                <span class="spanblock">{{order.user.phone}}</span>
+              </v-flex>
+              <v-flex md8>
+                <span class="spanblock">{{order.user.address}}</span>
+              </v-flex>
+            </v-layout>
           </v-flex>
+          <v-divider></v-divider>
         </v-card>
       </v-flex>
     </v-layout>
@@ -20,7 +29,7 @@
 import firestore from "../firebase/firestore.js";
 import router from "../router";
 
-const orderRef = firestore.collection("order");
+const orderRef = firestore.collection("order").where("status", "==", "pending");
 export default {
   firestore() {
     return {

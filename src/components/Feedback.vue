@@ -1,30 +1,28 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
-      <v-toolbar color="white">
-        <v-toolbar-title>Feedback</v-toolbar-title>
-      </v-toolbar>
-      <v-card>
-        <v-flex md12 pa-3>
-          <v-layout row v-for="feedback in feedbackList" :key="feedback" mt-4 mb-2>
-            <v-flex>
+      <v-flex md12>
+        <v-toolbar color="white">
+          <v-toolbar-title>Feedback</v-toolbar-title>
+        </v-toolbar>
+      </v-flex>
+      <v-flex md12>
+        <v-card mmunicode v-for="feedback in feedbackList" :key="feedback">
+          <v-flex pa-3>
+            <blockquote>
               <span class="mmunicode" v-text="feedback.the_feedback"></span>
-            </v-flex>
-            <v-flex>
-              <span class="mmunicode" v-text="feedback.user_address"></span>
-            </v-flex>
-            <v-flex>
+            </blockquote>
+
+            <br>
+            <v-flex text-md-right>
               <span class="mmunicode" v-text="feedback.user_name"></span>
-            </v-flex>
-            <v-flex>
               <span v-text="feedback.user_phone"></span>
+              <span class="mmunicode" text-md-right v-text="feedback.user_address"></span>
             </v-flex>
-            <v-flex>
-              <span>{{ feedback.date}}</span>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-card>
+          </v-flex>
+          <v-divider></v-divider>
+        </v-card>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
