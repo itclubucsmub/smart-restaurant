@@ -103,7 +103,6 @@ export default {
         } else {
           alert("No such document!");
         }
-        this.stockList = [];
         this.getStock();
       });
   },
@@ -112,27 +111,24 @@ export default {
       router.push({ name: "Order" });
     },
     getStock() {
-      console.clear();
       this.pri = 0;
-      var query = firestore.collection("stocklist");
+
+      this.stockList = [];
       for (let index = 0; index < this.orders.length; index++) {
         const element = this.orders[index];
         console.log(element.itemID);
         this.calcAmt(element.chargePrice);
-
         this.orderList.push(element);
-        query.where("item_id", "==", element.itemID);
-      }
-      query
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            this.stockList.push(doc.data());
+        firestore
+          .collection("stocklist")
+          .where("item_id", "==", element.itemID)
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              this.stockList.push(doc.data());
+            });
           });
-        })
-        .catch(err => {
-          console.log("No such documenedt!");
-        });
+      }
     },
     calcAmt(price) {
       this.pri += price;
