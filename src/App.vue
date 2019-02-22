@@ -38,9 +38,12 @@ export default {
       fixed: false,
       items: [
         { icon: "bubble_chart", title: "Order", to: "/" },
+
+        { icon: "bubble_chart", title: "Table Order", to: "/tableOrder" },
         { icon: "feedback", title: "Feedback", to: "/feedback" },
         { icon: "apps", title: "Inventory", to: "/inventory" },
         { icon: "library_books", title: "Category", to: "/category" }
+
       ],
       miniVariant: false,
       right: false,
